@@ -1,114 +1,59 @@
-﻿Denne oppgaven er en offentlig Google eksempel test. 
+﻿Finn to tall i en matrise som summeres til et måltall
 
-Gitt en matrise av heltall, returner indeksen til to tall som summeres til et gitt mål. 
- 
- Vi vil få to parametere inn. Først en matrise av heltall og så et måltall som også er et heltall. 
-
+Gitt en matrise av heltall, returner indeksen til to tall som summeres til et gitt måltall.  Vi vil få to parametere inn. Først en matrise av heltall og så et måltall som også er et heltall. 
  F.eks:
+ [2, 3, 5, 6, 9], 11  returnerer [2,3]
+ Avgrensinger til oppgaven: 
+•	Alle tall er positive
+•	Det er ingen duplikater
+•	Det vil ikke alltid være en løsning tilgjengelig. (Vi kan få en matrise som ikke har to tall som summert blir måltallet, eller vi kan få en tom matrise, eller en matrise med bare ett tall.)
+•	Hvis det ikke eksisterer noen løsning skal det returneres null.
+•	Det er bare ett par som kan summeres til måltallet, aldri flere par.
+Det er alltid en god i ide og skissere noen eksempler som dekker oppgaven og de begrensingene som er gitt. 
+Test tilfeller:
+[2,3,5,6,9] => 11 returnerer [2,3]  
+[2,3] => 5 returnerer [0,1]
+[2,3,5,6,9] => 19 returnerer null
+[] => 1 returnerer null
+[3] => 3 returnerer null
+Enkel løsning – rå kraft
+Vi starter med en enkel løsning som ikke er optimal med hensyn på Stor O. Men det er alltid bedre med en løsning som virker, om enn ikke optimalt, enn en løsning som nesten virker.
+Først finner vi en løsning uten å skrive noe kode. Hvordan kan vi løse denne oppgaven logisk?
 
- [2,3,5,6,9], 11  returnerer [2,3]
+[2,3,5,6,9] => 15
+For å løse denne kan vi sjekke alle tallene mot hverandre for å se om noen av dem summert blir måltallet. Det virker veldig enkelt når vi tenker på det, men det blir litt mer komplisert når vi skal utvikle en algoritme som skal finne en løsning. 
+1.	Først sjekker vi alle grensetilfellene og returnerer null hvis noen av dem slår til. 
+2.	Så starter vi med det første tallet i matrisen og sjekker det mot de andre. Blir noen av dem summert måltallet? 2+3, 2+5, 2+6, 2+9 => Ingen av disse blir 15 så vi vet at 2 ikke er en del av løsningen. 
+3.	Vi prøver så med det andre tallet i matrisen og summerer det med de resterende tallene i matrisen. 3+5, 3+6, 3+9 => Ingen av disse blir 15 så vi vet at 3 ikke er en del av løsningen.
+4.	Hva med det tredje tallet i matrisen? 5+6, 5+9 => Ingen av disse blir 15 så vi vet at 5 ikke er en del av løsningen.
+5.	Vi prøver til slutt med det fjerde tallet i matrisen. 6+9 => Dette paret blir 15 så vi vet at 6 og 9 er løsningen. 
+6.	Svaret blir indeksen til tallene 6 og 9 => [3,4]
 
- Bekrefte begrsningene til oppgaven: 
-
-* Er alle tallene positive eller kan de være negative?
-  Svar: Alle er positive
-* Er du duplikat nummer i matrisen.
-  Svar: Nei
-* Vil det alltid være en løsning tilgjengelig.
-  Svar: Nei, det vil ikke alltid være en løsning. 
-  (Vi kan få en matrise som ikke har to tall som summert blir måltallet, eller vi kan få en tom matrise, eller en matrise med bare ett tall.)
-* Hva skal returneres hvis det ikke eksister noen løsning?
-  Svar: Returner null
-* Kan det være flere par som summert blir måltallet? 
-  Svar: Nei. Bare ett par kan summeres til måltallet.
-
-  Test tilfeller:
-
-  [2,3,5,6,9] => 11  returnerer [2,3]  // Optimalt tilfelle
-    
-  [2,3] => 5 returnerer [0,1]
-
-  [2,3,5,6,9] => 19  returnerer null
-
-  [] => 1 returnerer null
-  
-  [3] => 3 returnerer null
-
-  ----------------------------------------------
-
-  Finne en løsning uten kode: 
-
-  [2,3,5,6,9] => 15
-
-  Hvordan vil du løse denne logisk?
-
-  Sjekke alle tallene  mot hverandre for å se om noen av dem summert blir måltallet. Vi er her ikke interessert i den optimale løsningen, først vil vi ha en løsnige som virker. 
-
-  Starter med det første tallet i matrisen. 2+3, 2+5, 2+6 , 2+9 => Ingen av disse blir 15 så vi vet at 2 ikke er en del av løsnigen. 
-  Vi prøver med det andre tallet i matrisen. 3+5, 3+6 , 3+9 => Ingen av disse blir 15 så vi vet at 3 ikke er en del av løsnigen. 
-  Vi prøver med det tredje tallet i matrisen. 5+6 , 5+9 => Ingen av disse blir 15 så vi vet at 5 ikke er en del av løsnigen. 
-  Vi prøver med det fjerde tallet i matrisen. 6+9 => Dette paret blir 15 så vi vet at 6 og 9 er løsnigen. Og svaret blir indeksen til tallene 6 og 9 => [3,4]
-
-
-  Algoritme:
-  Hvis p1 er tallet vi tester ut og p2 er tallene vi prøver å summere med og t er måltallet, kan vi skrive algoritmen slik: 
-
-  Tallet vi skal finne (p2) = måltallet t - p1 
+Enkel algoritme:
+Hvis P1 er tallet vi tester mot den andre, P2 er tallene i matrisen vi prøver å summere med og T er måltallet, kan vi skrive algoritmen slik: 
+Tallet vi skal finne i matrisen er: P2 = T - P1 
   p2 = t - numbers[p1]
+Vårt eksempel: Numbers [2, 3, 5, 6, 9] => 15
+Første runde: T = 15, P1 = 2, så tallet vi leter etter er: (15 - 2 = 13): P2 = 13. Vi løper gjennom hele matrisen fra start, til vi enten finner p2 (13) eller kommer til slutten av matrisen. 
+Hvis vi ikke fant et tallpar går vi videre til runde to. Vi tilordner P1 til tallet i posisjon nummer 2 i matrisen. P1 = numbers[1] som er 3. 
+Andre runde: T = 15, P1 = 3, så tallet vi leter etter er: 15 - 3 = 12.  P2 = 12. Vi løper gjennom hele matrisen fra start indeks 1, siden vi allerede har testet numbers[0], til vi enten finner P2 (12) eller kommer til slutten av matrisen. 
+Resterende runder: Hvis vi finner tallet før vi kommer til slutten av matrisen så returnere vi en matrise med indeksene til P1 og P2. I vårt tilfelle vil vi få riktig sum når P1 = numbers[3] og P2 = [4] så vi returnerer [3,4]
+Slutten: Hvis vi kommer til så langt at vi sjekker det nest siste tallet i matrisen med det siste tallet i matrisen uten å finne et tallpar som blir 15, returnere vi null.
 
-  Første runde: T = 15, p1 = 2, så tallet vi leteer etter er: 15 - 2 = 13. p2 = 13. Vi løper gjennom hele matrisen fra start indeks 0, til vi enten finner p2 (13) eller kommer til slutten av matrisen. 
+Er dette en optimal løsning? Nei, siden vi har nestede løkker så har vi en StorO kompleksitet: O(N^2).
 
-  Hvis vi ikke fant et tallpar går vi videre til runde to. Vi tilorder p1 til tallet i posisjon 2. p1 = numbers[1] som er 3. 
-  Andre runde: T = 15, p1 = 3, så tallet vi leteer etter er: 15 - 3 = 12. p2 = 12. Vi løper gjennom hele matrisen fra start indeks 1, siden vi allerede har testet number[0], 
-  til vi enten finner p2 (12) eller kommer til slutten av matrisen. 
+En mer effektiv løsning
+Hvis vi bruker litt mer minne så kan vi få ned tidskompleksiteten, vi ofrer plass for mot tid. Løsningen er å ta vare på den beregningen vi gjør i den innerste løkken i eksempler ovenfor. 
+Vi beholder den første løkken og finner tallet (P2) vi leter etter ved å subtrahere det første tallet i matrisen fra måltallet som tidligere. Men i stedet for å sammenligne det med andre tallene i matrisen tar vi vare på det og lagrer det i en Hashtable, eller Dictionary<T> i C# verden. Vi ønsker å bruke en Dictionary fordi et oppslag i den har en konstant kostnad på O(1) når vi har nøkkelen, og nøkkelen er tallet vi skal finne (P2). 
 
-  Hvis vi finner tallet før vi kommer til slutten av matrisen så returnere vi en matrise med indeksene til p1 og p2. I vårt tilfelle vil vi få riktig sum når p1 = numbers[3] og p2 = [4] så vi returnerer [3,4]
-
-  Hvis vi kommer til så langt at vi sjekker det nest siste tallet i matrisen med det siste tallet i matrisen uten å finne et tallpar som blir 15, returnere vi null
-
-  -----
-
-  Mer effektiv løsning. 
-
-  Vi har to løkker i løsningen vår. 
-  * Den første løkken finner tallet vi leter etter ved å subtrahere det første tallet i matrisen fra måltallet. 
-  * Den andre løkken sjekker tallene i matrisen en etter en for å se om det er noen som svarer til tallet vi skal finne. 
-  Når løkken er ferdig så kastes tallet bort og all beregning som er gjort.
-
-  Hvis vi i stedet for å sjekke tallet vi ønsker å finne i den første løkken, lagrer det i en Dicionary så kan vi bruke det for å sjekke om vi har et treff. 
-  Vi ønsnker å bruke en Dicionary fordi et oppslag i en Dicionary har en kostnad på O(1) så lenge vi har nøkkelen. 
-
-  Nøkkelen vi ønsker å bruke her er tallet vi ønsker å finne. 
-
-  Først finner vi tallet vi ønsker å  finne ved å subtrahere Numbers[0] fra måltallet. Dette nummeret vi ønkser å finne lagrer vi som en nøkkel i en Dicionary med index 0 som verdien.
-  Deretter fortsetter vi løkken til P1. 
-  * Først kalkulerer vi tallet vi ønsker å finne ved å subtrahere Numbers[1] fra måltallet.
-  * Finnes dette tallet i vår Dicionary?
-     - Hvis ja, vi har funnet løsningen
-     - Hvis nei, vi lagrer tallet vi øsnker å finne som en ny nøkkel i vår Dicionary og indeks p1 som verdien
-  
-  Gjenta prosedyren til vi enten har et treff i vår Dicionary, eller har gått gjennom hele matrisen. 
-
-   [2,3,5,6,9] => 15
-
-   13 : 0
-   12 : 1
-   10 : 2
-   9 : 3   => treff på 9 og p1 = 4
-
-  Når vi får et treff reutrnerer vi verdien av nøkkelen til tallet som er et treff og p1 som er indeks til det tallet som vi tester med.
-
-
-  Hvis vi ser på vår BigO så har vi gått fra:
-  * Tid: O(N^2)
-  * Plass: O(1)
-
-  Vi løper bare over matrisen en gang, men vi lagrer alle de beregnede tallene som vi ønsker å finne i en Dictionary noe vi ikke gjorde tidligere. 
-  Til:
-  * Tid: O(N)
-  * Plass O(N)
-
-
-
-
-
+1.	Først finner vi tallet vi ønsker å finne ved å subtrahere første siffer i matrisen (P1) fra måltallet T. Dette nummeret (P2) er det vi ønsker å finne lagrer vi som en nøkkel i en Dicionary med indeks 0 som verdien. <13, 0>
+2.	Deretter fortsetter vi løkken for P1.
+3.	Vi beregner tallet vi ønsker å finne ved å subtrahere neste siffer i matrisen fra måltallet T.
+4.	Finnes dette tallet i vår Dictionary?
+a.	Hvis ja, vi har funnet løsningen
+b.	Hvis nei, vi lagrer tallet vi ønsker å finne som en ny nøkkel i vår Dictionary og indeks til P1 som verdien. <12,1>, <10,2>, <9,3>
+5.	Gjenta prosedyren til vi enten har et treff i vår Dictionary, eller har gått gjennom hele matrisen.
+6.	Vi får treff på oppslag i Dictionary på nøkkelen 9 og med verdi 3. Vi returner verdien 3 og indeks til P1 som er 4 i vårt tilfelle. [3, 4].
+Denne algoritmen mer effektiv enn den første siden vi ikke har noen nestede løkker, men vi bruker som sagt mer minne: 
+Tid: O(N)
+Minne: O(N)
